@@ -1,6 +1,6 @@
 # Hi, I'm yehloo 👋
 
-**English** · [中文](README.zh-CN.md)
+**English** · [Chinese](README.zh-CN.md)
 
 **AI Experience Design Leader · Designer × Builder**
 
@@ -25,13 +25,13 @@ An AI intelligence hub for teams: daily digests, model and funding timelines, a 
 A patent-feasibility workflow for early product ideas. It translates complex search evidence into innovation scores, product directions, risks, and interface flows. The hosted version is a no-cost functional demo; the local FastAPI implementation is retained in the repository.
 
 **📚 [College of Design](https://github.com/yehloo-ai/college-of-design)**
-A curated learning system for designers growing in the AI era, organized around UX foundations, AI workflow integration, and career development.
+A curated learning system for designers growing in the AI era, organized around UX foundations, AI workflow integration, and career development. It brings together original articles, audio transcripts, and a 17-step Vibe Coding guide as a reusable capability-building platform across desktop and mobile.
 
 **🎙️ [AI Daily Note](https://github.com/yehloo-ai/ai-daily-note)**
-A cross-device voice-to-Obsidian workflow that reduces the distance between a thought and a reusable team or personal knowledge asset.
+A cross-device voice-to-Obsidian workflow that reduces the distance between a thought and a reusable team or personal knowledge asset. It captures, cleans, structures, and routes spoken ideas into durable notes, exploring how lightweight AI automation can support reflection, team learning, and long-term knowledge compounding.
 
 **🎬 [WanHuaTong](https://github.com/yehloo-ai/wanhuatong)**
-An automated text-to-video pipeline that turns lesson content into storyboards, generated imagery, voice, and animation.
+An automated text-to-video pipeline that turns lesson content into storyboards, generated imagery, voice, and animation. It connects content parsing, visual planning, narration, and motion into a repeatable production workflow, showing how a small team can turn educational material into publishable media with fewer handoffs.
 
 ---
 
@@ -52,6 +52,8 @@ My working loop is:
 ## ✍️ Writing and community
 
 I publish design thinking and contribute through IXDC activities, university talks, workshops, and design-community exchanges. These are another part of the same practice: turning personal exploration into shared capability.
+
+📕 **Xiaohongshu / RED:** `6076830993`
 
 ## 🔭 Current focus
 
