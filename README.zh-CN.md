@@ -1,4 +1,4 @@
-# 你好，我是 yehloo
+# 你好，我是 yehloo 👋
 
 [English](README.md) · **中文**
 
@@ -8,34 +8,34 @@
 
 我把 coding agent 当作一种设计材料：让战略更具体、更早验证工作流，也更快把可运行的产品放到真实用户面前。这个 GitHub 是我方法与交付能力的可验证部分。
 
-- **体验方向：** 人机协作、信心建立、用户控制、反馈机制与体验评估
-- **团队操作系统：** 研究、原型、设计到代码、共享标准与能力建设
-- **真实交付：** 连接产品判断、交互设计与工程实现的 AI 原生工具
+- 🧭 **体验方向：** 人机协作、信心建立、用户控制、反馈机制与体验评估
+- 🧩 **团队操作系统：** 研究、原型、设计到代码、共享标准与能力建设
+- 🚀 **真实交付：** 连接产品判断、交互设计与工程实现的 AI 原生工具
 
-[X / Twitter](https://x.com/yehloolau) · [Substack](https://aistation.substack.com/subscribe) · 公众号：`叶鲁设计思考 / yehloo-design`
+🐦 [X / Twitter](https://x.com/yehloolau) · 📮 [Substack](https://aistation.substack.com/subscribe)
 
 ---
 
-## 代表项目
+## ⭐ 代表项目
 
-**[飞翔7号的 AI 资讯站](https://github.com/yehloo-ai/ai-news-station)**
+**🗞️ [飞翔7号的 AI 资讯站](https://github.com/yehloo-ai/ai-news-station)**
 面向团队的 AI 情报中枢：每日速览、模型与资本动态、工具目录和可交叉筛选的信息流。它不只是内容页面，也是在探索 AI 设计组织如何建立共同认知，并把外部变化转化为内部行动。
 
-**[灵感探针](https://github.com/yehloo-ai/lingan-tanzhen)**
+**🔍 [灵感探针](https://github.com/yehloo-ai/lingan-tanzhen)**
 面向产品早期想法的专利可行性工作流，把复杂检索证据转化为创新评分、产品方向、风险与界面流程。线上版本为零成本功能演示，本地 FastAPI 实现仍保留在仓库中。
 
-**[设计学院](https://github.com/yehloo-ai/college-of-design)**
+**📚 [设计学院](https://github.com/yehloo-ai/college-of-design)**
 面向 AI 时代设计师的学习系统，围绕 UX 基础、AI 工作流融合与职业成长组织内容。
 
-**[AI 每日小记](https://github.com/yehloo-ai/ai-daily-note)**
+**🎙️ [AI 每日小记](https://github.com/yehloo-ai/ai-daily-note)**
 跨设备的语音到 Obsidian 工作流，缩短一个想法到可复用个人或团队知识资产之间的距离。
 
-**[万花筒](https://github.com/yehloo-ai/wanhuatong)**
+**🎬 [万花筒](https://github.com/yehloo-ai/wanhuatong)**
 课文转视频自动化流水线，把内容依次转化为分镜、生成图像、配音与动画。
 
 ---
 
-## 我的领导与交付方法
+## 🛠️ 我的领导与交付方法
 
 我的工作闭环是：
 
@@ -49,11 +49,11 @@
 
 ---
 
-## 写作与行业影响力
+## ✍️ 写作与行业影响力
 
-我通过公众号 **叶鲁设计思考**（`yehloo-design`）持续分享设计思考，也参与 IXDC 活动、高校分享、工作坊与设计社区交流。它们和产品实践属于同一件事：把个人探索转化为团队和行业可以复用的能力。
+我持续沉淀并分享设计思考，也参与 IXDC 活动、高校分享、工作坊与设计社区交流。它们和产品实践属于同一件事：把个人探索转化为团队和行业可以复用的能力。
 
-## 当前关注
+## 🔭 当前关注
 
 - 让 AI 能力、不确定性和用户控制在体验中清晰可见
 - 建立 AI 时代设计团队的工作机制与能力模型
