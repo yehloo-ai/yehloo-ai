@@ -1,58 +1,61 @@
-# Hi, I'm Yehloo 👋
+# Hi, I'm yehloo
 
 **English** · [中文](README.zh-CN.md)
 
-Product designer by day. Builder of AI tools by night.
+**AI Experience Design Leader · Designer × Builder**
 
-I don't have a traditional engineering background — I use Claude Code and coding agents to turn design ideas into real, working products. For me, code is just another design material. The constraint of shipping something real forces better thinking than any mockup ever could.
+I work at the intersection of AI product strategy, UX, and design-team enablement. My focus is not adding AI to existing screens. It is turning model capabilities into experiences people can understand, control, trust, and use to get meaningful work done.
 
-Right now I'm focused on tools that make designers more capable: things that reduce friction between having an idea and putting it in front of users.
+I use coding agents as a design material: to make strategy tangible, test workflows early, and put working products in front of people. This GitHub is the proof-of-work layer of that practice.
 
-- 🎨 Day job: product design / UX design
-- 🔧 Hobby: building AI-native tools for designers and creators
-- ⚡ Stack of choice: single HTML file + a good API
+- **Experience direction:** human-AI collaboration, confidence, control, feedback, and evaluation
+- **Team operating system:** research, prototyping, design-to-code, shared standards, and capability building
+- **Delivery:** working AI-native tools that connect product thinking, interaction design, and implementation
 
-🐦 [X / Twitter](https://x.com/yehloolau) · 📮 [Substack](https://aistation.substack.com/subscribe)
-
----
-
-## ⭐ Featured projects
-
-**🎙️ [AI Daily Note](https://github.com/yehloolau-afk/ai-daily-note)** — Cross-device voice journaling tool. macOS floating widget + iOS Shortcut, both powered by Typeless. Speak a thought, it lands in your Obsidian table — tagged by device, synced via iCloud, zero friction.
-
-**🔍 [Patent Scout](https://github.com/yehloolau-afk/lingan-tanzhen)** — Patent feasibility scanner for product ideas. Searches CN/US/EP patents, breaks the innovation score into transparent dimensions (patent crowding / tech novelty / market gap), and returns structured product directions (positioning / mechanism / patentable moat / risk / MVP) — each paired with an iOS-scale UI flow. Similar patents come with a patent number and a clickable link to the original record so you can verify the evidence.
-
-**🗞️ [AI News Station](https://github.com/yehloolau-afk/ai-news-station)** — AI news hub with several surfaces: a daily digest, model-release + funding timelines (priority-weighted cards), an AI tools directory, and a cross-filterable firehose (source × topic). 20+ sources, auto-translated, hourly; static pages built for SEO. Built for my team, now open to everyone.
-
-**📚 [College of Design](https://github.com/yehloolau-afk/college-of-design)** — A curated knowledge platform for designers growing in the AI era. Three tracks: UX Design fundamentals, AIGC workflow integration, and career growth — hand-picked resources, no fluff.
-
-**🎨 [WanHuaTong](https://github.com/yehloolau-afk/wanhuatong)** — Elementary school text-to-video automation pipeline. Feed in a lesson text, get back a complete video: storyboard → AI-generated images → voiced animation, fully automated.
-
-**💳 [Fintech Leon](https://github.com/yehloolau-afk/fintech-clone)** — AI-cloned fintech product UI built with Next.js. Reverse-engineered from a live site using Claude Code — design tokens extracted, components rebuilt section by section.
+[X / Twitter](https://x.com/yehloolau) · [Substack](https://aistation.substack.com/subscribe) · WeChat: `yehloo-design`
 
 ---
 
-## 🛠️ How I build
+## Selected work
 
-I start with a problem, not a stack. Most tools begin as a single HTML file — no framework, no build step, no deploy pipeline. Just an idea and an afternoon.
+**[AI News Station](https://github.com/yehloo-ai/ai-news-station)**
+An AI intelligence hub for teams: daily digests, model and funding timelines, a tools directory, and a cross-filterable news stream. More than a content page, it explores how an AI design organization builds shared awareness and turns external change into internal action.
 
-**Typical workflow:**
-1. Describe the problem to Claude Code
-2. Iterate in the browser until it feels right
-3. Ship to GitHub Pages
+**[Patent Scout](https://github.com/yehloo-ai/lingan-tanzhen)**
+A patent-feasibility workflow for early product ideas. It translates complex search evidence into innovation scores, product directions, risks, and interface flows. The hosted version is a no-cost functional demo; the local FastAPI implementation is retained in the repository.
 
-When a project needs more structure, I reach for Python (local tools, automation) or Next.js. But I resist that as long as possible.
+**[College of Design](https://github.com/yehloo-ai/college-of-design)**
+A curated learning system for designers growing in the AI era, organized around UX foundations, AI workflow integration, and career development.
 
-`Claude Code` · `HTML / CSS / JS` · `Python` · `GitHub Pages` · `Cloudflare Workers`
+**[AI Daily Note](https://github.com/yehloo-ai/ai-daily-note)**
+A cross-device voice-to-Obsidian workflow that reduces the distance between a thought and a reusable team or personal knowledge asset.
 
-I treat AI coding tools the way designers treat Figma components — not magic, just a way to think faster and iterate more honestly.
+**[WanHuaTong](https://github.com/yehloo-ai/wanhuatong)**
+An automated text-to-video pipeline that turns lesson content into storyboards, generated imagery, voice, and animation.
 
 ---
 
-## 📖 What I'm learning
+## How I lead and build
 
-- How to think in systems, not just screens — building a voice-to-Obsidian pipeline taught me more than any UX course
-- When to use AI as a thinking partner vs. a code generator — the distinction changes the quality of what gets built
-- How designers without an engineering background can ship real products in the AI era
+My working loop is:
 
-Following: [zarazhangrui](https://github.com/zarazhangrui) · [follow-builders](https://github.com/zarazhangrui/follow-builders)
+1. Frame the user and business decision, not just the interface request
+2. Map the human-AI workflow, including uncertainty and failure states
+3. Build a working prototype early with coding agents
+4. Evaluate usefulness, controllability, trust, and delivery cost
+5. Turn the learning into reusable patterns, standards, and team capability
+
+`AI product strategy` · `UX leadership` · `Human-AI interaction` · `Design systems` · `Prototyping` · `HTML / CSS / JS` · `Python`
+
+---
+
+## Writing and community
+
+I share design thinking through **叶鲁设计思考** (`yehloo-design`) and contribute through IXDC activities, university talks, workshops, and design-community exchanges. These are another part of the same practice: turning personal exploration into shared capability.
+
+## Current focus
+
+- Designing AI experiences that make capability, uncertainty, and user control visible
+- Building an operating model for AI-enabled design teams
+- Connecting design strategy, working prototypes, and measurable outcomes
+- Helping designers move from delivering screens to shaping intelligent systems

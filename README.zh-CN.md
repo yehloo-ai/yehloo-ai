@@ -1,58 +1,61 @@
-# 你好，我是 Yehloo 👋
+# 你好，我是 yehloo
 
 [English](README.md) · **中文**
 
-产品设计师，业余时间做 AI 工具。
+**AI 体验设计 Leader · Designer × Builder**
 
-我没有传统的工程背景——我用 Claude Code 和 coding agent 把设计想法变成真实可用的产品。对我来说，代码只是另一种设计材料。要把东西真正做出来上线的约束，比任何原型图都更能逼出好的思考。
+我专注于 AI 产品战略、UX 体验与设计团队能力建设的交叉地带。我的目标不是简单地给现有界面增加 AI 功能，而是把模型能力转化为用户能够理解、控制、信任，并真正完成任务的产品体验。
 
-我现在专注于让设计师变得更有能力的工具：降低从有想法到让用户用上之间的摩擦。
+我把 coding agent 当作一种设计材料：让战略更具体、更早验证工作流，也更快把可运行的产品放到真实用户面前。这个 GitHub 是我方法与交付能力的可验证部分。
 
-- 🎨 本职：产品设计/UX设计
-- 🔧 爱好：为设计师和创作者打造 AI 工具
-- ⚡ 最爱的技术栈：单 HTML 文件 + 好用的 API
+- **体验方向：** 人机协作、信心建立、用户控制、反馈机制与体验评估
+- **团队操作系统：** 研究、原型、设计到代码、共享标准与能力建设
+- **真实交付：** 连接产品判断、交互设计与工程实现的 AI 原生工具
 
-🐦 [X / Twitter](https://x.com/yehloolau) · 📮 [Substack](https://aistation.substack.com/subscribe)
-
----
-
-## ⭐ 精选项目
-
-**🎙️ [AI 每日小记](https://github.com/yehloolau-afk/ai-daily-note)** — 跨端语音记录工具。Mac 端桌面悬浮窗 + iOS 快捷指令，均由 Typeless 驱动。说出一个想法，自动写入 Obsidian 表格，区分设备来源，iCloud 实时同步，零摩擦。
-
-**🔍 [灵感探针](https://github.com/yehloolau-afk/lingan-tanzhen)** — 面向产品想法的专利可行性检索工具。检索中美欧三方专利，把创新分拆解为三个透明维度（专利拥挤度 / 技术新颖度 / 市场空白度），输出结构化产品方向（定位 / 机制 / 可专利壁垒 / 风险 / MVP），每条配 iOS 真实字号的界面流程；相似专利附专利号与可点原文链接，方便核验。
-
-**🗞️ [飞翔7号的AI资讯站](https://github.com/yehloolau-afk/ai-news-station)** — AI 资讯中枢，多个场景：每日速览、模型发布与资本动态大事记（按优先级分级的卡片）、AI 工具库导航，以及可按来源×分类交叉筛选的全量流。20+ 来源、自动翻译、每小时更新，静态页面利于搜索收录。为团队打造，现已对外开放。
-
-**📚 [设计学院](https://github.com/yehloolau-afk/college-of-design)** — 为 AI 时代成长中的设计师打造的知识平台。三条学习路径：UX 设计基础、AIGC 工作流融合、职业成长，精选内容，去掉水分。
-
-**🎨 [万花筒](https://github.com/yehloolau-afk/wanhuatong)** — 小学课文转视频自动化流水线。输入课文，产出完整视频：分镜 → AI 生图 → 配音动画，全程自动化。
-
-**💳 [Fintech Leon](https://github.com/yehloolau-afk/fintech-clone)** — 用 Next.js 还原的金融产品 UI。通过 Claude Code 对线上产品进行逆向工程，提取设计 token，逐模块重建。
+[X / Twitter](https://x.com/yehloolau) · [Substack](https://aistation.substack.com/subscribe) · 公众号：`叶鲁设计思考 / yehloo-design`
 
 ---
 
-## 🛠️ 我怎么做东西
+## 代表项目
 
-我从问题出发，不从技术栈出发。大多数工具都从一个 HTML 文件开始——不用框架，不用构建，不需要复杂的部署流程。一个想法，一个下午。
+**[飞翔7号的 AI 资讯站](https://github.com/yehloo-ai/ai-news-station)**
+面向团队的 AI 情报中枢：每日速览、模型与资本动态、工具目录和可交叉筛选的信息流。它不只是内容页面，也是在探索 AI 设计组织如何建立共同认知，并把外部变化转化为内部行动。
 
-**典型工作流：**
-1. 把问题描述给 Claude Code
-2. 在浏览器里反复调整，直到感觉对了
-3. 部署到 GitHub Pages
+**[灵感探针](https://github.com/yehloo-ai/lingan-tanzhen)**
+面向产品早期想法的专利可行性工作流，把复杂检索证据转化为创新评分、产品方向、风险与界面流程。线上版本为零成本功能演示，本地 FastAPI 实现仍保留在仓库中。
 
-当项目需要更多结构，我会用 Python（本地工具和自动化）或 Next.js。但我会尽量推迟这一步。
+**[设计学院](https://github.com/yehloo-ai/college-of-design)**
+面向 AI 时代设计师的学习系统，围绕 UX 基础、AI 工作流融合与职业成长组织内容。
 
-`Claude Code` · `HTML / CSS / JS` · `Python` · `GitHub Pages` · `Cloudflare Workers`
+**[AI 每日小记](https://github.com/yehloo-ai/ai-daily-note)**
+跨设备的语音到 Obsidian 工作流，缩短一个想法到可复用个人或团队知识资产之间的距离。
 
-我把 AI 编程工具当成 Figma 组件来用——不是魔法，而是让思考更快、迭代更诚实的方式。
+**[万花筒](https://github.com/yehloo-ai/wanhuatong)**
+课文转视频自动化流水线，把内容依次转化为分镜、生成图像、配音与动画。
 
 ---
 
-## 📖 我在学什么
+## 我的领导与交付方法
 
-- 如何从系统思维而非界面思维出发——设计从语音输入到 Obsidian 存储的完整链路，比任何 UX 课程收获更多
-- 何时把 AI 当思维伙伴，何时当代码生成器——这个区分决定了产出的质量
-- 没有工程背景的设计师，如何在 AI 时代真正把产品做出来
+我的工作闭环是：
 
-关注中：[zarazhangrui](https://github.com/zarazhangrui) · [follow-builders](https://github.com/zarazhangrui/follow-builders)
+1. 先定义用户与业务决策，而不是直接接受界面需求
+2. 绘制人机协作工作流，并纳入不确定性与失败状态
+3. 用 coding agent 尽早构建可运行原型
+4. 评估有用性、可控性、信任与交付成本
+5. 把项目经验沉淀为可复用模式、标准与团队能力
+
+`AI 产品战略` · `UX Leadership` · `人机交互` · `设计系统` · `原型验证` · `HTML / CSS / JS` · `Python`
+
+---
+
+## 写作与行业影响力
+
+我通过公众号 **叶鲁设计思考**（`yehloo-design`）持续分享设计思考，也参与 IXDC 活动、高校分享、工作坊与设计社区交流。它们和产品实践属于同一件事：把个人探索转化为团队和行业可以复用的能力。
+
+## 当前关注
+
+- 让 AI 能力、不确定性和用户控制在体验中清晰可见
+- 建立 AI 时代设计团队的工作机制与能力模型
+- 连接设计战略、可运行原型与可衡量结果
+- 推动设计师从交付界面走向定义智能系统
