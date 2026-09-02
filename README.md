@@ -18,6 +18,9 @@ I use coding agents as a design material: to make strategy tangible, test workfl
 
 ## ⭐ Selected work
 
+**📸 Yu Ni He Pai / 与你合拍**
+A mobile-first AI co-photo MVP that turns a user portrait, a selected person, and a contextual scene into one natural-looking shared photograph. It explores identity preservation, multi-image conditioning, privacy consent, generation controls, and provider switching as a responsible synthetic-media experience.
+
 **🗞️ [AI News Station](https://github.com/yehloo-ai/ai-news-station)**
 An AI intelligence hub for teams: daily digests, model and funding timelines, a tools directory, and a cross-filterable news stream. More than a content page, it explores how an AI design organization builds shared awareness and turns external change into internal action.
 
