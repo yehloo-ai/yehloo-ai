@@ -18,6 +18,9 @@
 
 ## ⭐ 代表项目
 
+**◫ [页屿 Yeyu](https://github.com/yehloo-ai/yeyu)**
+开源 Chrome 新标签页工作台，把常用网页整理成截图卡片，支持实时拖拽排序、RSS 新增数量和网页内容变化提醒。数据保存在本机，网站权限按需申请，让常用入口更容易识别，值得关注的更新及时浮现。[下载 v1.0.0](https://github.com/yehloo-ai/yeyu/releases/tag/v1.0.0)。
+
 **🗞️ [飞翔7号的 AI 资讯站](https://github.com/yehloo-ai/ai-news-station)**
 面向团队的 AI 情报中枢：每日速览、模型与资本动态、工具目录和可交叉筛选的信息流。它不只是内容页面，也是在探索 AI 设计组织如何建立共同认知，并把外部变化转化为内部行动。
 
