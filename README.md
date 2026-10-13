@@ -18,8 +18,8 @@ I use coding agents as a design material: to make strategy tangible, test workfl
 
 ## ⭐ Selected work
 
-**◫ [Yeyu · 页屿](https://github.com/yehloo-ai/yeyu)**
-An open-source Chrome new-tab workspace that turns saved webpages into screenshot cards. It combines live drag-and-drop sorting, RSS update counts, and webpage-change badges, with local storage and website permissions requested only when needed. [Download v1.0.0](https://github.com/yehloo-ai/yeyu/releases/tag/v1.0.0).
+**🗂️ [Yeyu](https://github.com/yehloo-ai/yeyu)**
+An open-source Chrome workspace for returning to useful webpages and keeping up with new content. Screenshot cards make destinations recognizable, live drag-and-drop supports personal organization, and update badges bring changes into view. It explores how visual memory and lightweight change awareness can make everyday navigation feel more direct.
 
 **📸 [DreamFrame](https://github.com/yehloo-ai/DreamFrame)**
 A mobile-first AI co-photo MVP that turns a user portrait, a selected person, and a contextual scene into one natural-looking shared photograph. It explores identity preservation, multi-image conditioning, privacy consent, generation controls, and provider switching as a responsible synthetic-media experience.
