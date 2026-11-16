@@ -1,0 +1,187 @@
+<!doctype html><html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>故宫三维总览</title><style>html,body{margin:0;height:100%;overflow:hidden;background:#e8e8df;color:#27342f;font:14px system-ui}#palace-orbit{height:100%}#palace-orbit>.viz-row{display:none!important}#palace-orbit .palace-stage{height:100%!important}#palace-orbit .palace-tag{background:#faf9f1e8;border:1px solid #c7c8ba;color:#26372e;border-radius:4px;padding:4px 8px;box-shadow:0 2px 10px #14281b0a}#palace-orbit .palace-tag:hover{background:#913e2d;color:white;border-color:#913e2d}button:focus-visible{outline:3px solid #b74c36;outline-offset:3px}</style></head><body><div id="palace-orbit">
+  <div class="viz-row" style="justify-content:space-between;margin-bottom:10px">
+    <span>故宫 · 三维漫游</span>
+    <div class="viz-row">
+      <label class="form-check"><input class="form-check-input" type="checkbox" id="palace-axis" checked><span class="form-check-label">中轴线</span></label>
+      <label class="form-check"><input class="form-check-input" type="checkbox" id="palace-labels" checked><span class="form-check-label">建筑名称</span></label>
+    </div>
+  </div>
+  <div class="palace-stage" aria-label="可拖动旋转的故宫三维建筑模型">
+    <canvas aria-label="鼠标左键拖动旋转，滚轮缩放，右键拖动平移。支持触摸旋转与双指缩放。"></canvas>
+    <div class="palace-tags"></div>
+    <div class="palace-loading" role="status">正在建立宫殿与院落…</div>
+  </div>
+  <div class="viz-row text-small" style="justify-content:space-between;margin-top:10px">
+    <span>拖动旋转 · 滚轮缩放 · 右键平移</span>
+    <span class="palace-bearing" aria-live="off">南侧视角</span>
+  </div>
+</div>
+<style>
+#palace-orbit .palace-stage{position:relative;height:560px;overflow:hidden;touch-action:none}
+#palace-orbit canvas{display:block;width:100%;height:100%;cursor:grab;touch-action:none}
+#palace-orbit canvas:active{cursor:grabbing}
+#palace-orbit .palace-tags{position:absolute;inset:0;pointer-events:none;overflow:hidden}
+#palace-orbit .palace-tag{pointer-events:auto;cursor:pointer;font-family:inherit;position:absolute;white-space:nowrap;color:var(--foreground,#242c2d);background:var(--background,#f5f4ef);padding:3px 7px;transform:translate(-50%,-100%);border-bottom:1px solid var(--border,#ccc);font-size:12px;line-height:1.4}
+#palace-orbit .palace-loading{position:absolute;inset:0;display:grid;place-items:center;background:var(--background,#f5f4ef);color:var(--foreground,#242c2d)}
+@media(max-width:480px){#palace-orbit .palace-stage{height:440px}}
+</style>
+<script src="three.min.js"></script>
+<script>
+(()=>{
+ const root=document.getElementById('palace-orbit'),canvas=root.querySelector('canvas'),stage=root.querySelector('.palace-stage'),loading=root.querySelector('.palace-loading');
+ try{
+ const T=window.THREE;if(!T)throw Error('三维引擎未加载');
+ const renderer=new T.WebGLRenderer({canvas,antialias:true,alpha:true,powerPreference:'high-performance'});
+ renderer.setPixelRatio(Math.min(devicePixelRatio,1.6));renderer.shadowMap.enabled=true;renderer.shadowMap.type=T.PCFSoftShadowMap;renderer.outputColorSpace=T.SRGBColorSpace;renderer.toneMapping=T.ACESFilmicToneMapping;renderer.toneMappingExposure=1.24;
+ const scene=new T.Scene();const camera=new T.PerspectiveCamera(39,1,2,6500);
+ const ambient=new T.HemisphereLight(0xe3eeff,0x615a40,2.05);scene.add(ambient);
+ const sun=new T.DirectionalLight(0xffedcf,3.1);sun.position.set(-410,690,300);sun.castShadow=true;sun.shadow.mapSize.set(2048,2048);Object.assign(sun.shadow.camera,{left:-620,right:620,top:620,bottom:-620,near:10,far:1700});sun.shadow.normalBias=1.3;sun.shadow.bias=-.00015;scene.add(sun);
+ const model=new T.Group();scene.add(model);
+ const materials={};
+ function mat(name,color,roughness=.85){materials[name]=new T.MeshStandardMaterial({color,roughness,metalness:name==='roof'?.14:0});}
+ mat('wall',0x963e32);mat('red',0x7c261e);mat('roof',0xc69739,.54);mat('ridge',0xe2b756,.55);mat('stone',0xc5c0aa);mat('white',0xe0dcca);mat('paving',0x9b9b8d);mat('teal',0x275854);mat('dark',0x342c24);mat('water',0x497979,.3);mat('earth',0x626c4f);mat('leaf',0x465c36);mat('leaf2',0x657047);mat('trunk',0x695441);mat('base',0x79786a);
+ const geom={box:new T.BoxGeometry(1,1,1),cyl:new T.CylinderGeometry(1,1,1,8),sphere:new T.IcosahedronGeometry(1,1)};
+ const tileCanvas=document.createElement('canvas');tileCanvas.width=128;tileCanvas.height=128;const tc=tileCanvas.getContext('2d');
+ tc.fillStyle='#b68b35';tc.fillRect(0,0,128,128);for(let i=0;i<8;i++){let g=tc.createLinearGradient(i*16,0,i*16+16,0);g.addColorStop(0,'#80632c');g.addColorStop(.2,'#be973f');g.addColorStop(.45,'#d5ac56');g.addColorStop(.75,'#bd913a');g.addColorStop(1,'#8b692c');tc.fillStyle=g;tc.fillRect(i*16,0,16,128);for(let j=0;j<5;j++){tc.fillStyle='rgba(69,48,12,.20)';tc.fillRect(i*16,j*26+(i%2)*3,16,1.5);}}
+ const tileMap=new T.CanvasTexture(tileCanvas);tileMap.colorSpace=T.SRGBColorSpace;tileMap.wrapS=tileMap.wrapT=T.RepeatWrapping;tileMap.anisotropy=Math.min(8,renderer.capabilities.getMaxAnisotropy());materials.roof.map=tileMap;materials.roof.color.set(0xffffff);
+ const batches=new Map(),surfaces={},lines=[];const temp=new T.Object3D();
+ function instance(shape,m,x,y,z,w,h,d,rot=0){const key=shape+'|'+m;if(!batches.has(key))batches.set(key,[]);temp.position.set(x,y,z);temp.scale.set(w,h,d);temp.rotation.set(0,rot,0);temp.updateMatrix();batches.get(key).push(temp.matrix.clone());}
+ const box=(m,x,y,z,w,h,d,r=0)=>instance('box',m,x,y,z,w,h,d,r);
+ function triangle(m,a,b,c){if(!surfaces[m])surfaces[m]=[];surfaces[m].push(...a,...b,...c);}
+ function quad(m,a,b,c,d){triangle(m,a,b,c);triangle(m,a,c,d);}
+ function rod(a,b,r,m='ridge'){let av=new T.Vector3(...a),bv=new T.Vector3(...b),v=bv.clone().sub(av);const key='cyl|'+m;if(!batches.has(key))batches.set(key,[]);temp.position.copy(av.add(bv).multiplyScalar(.5));temp.quaternion.setFromUnitVectors(new T.Vector3(0,1,0),v.clone().normalize());temp.scale.set(r,v.length(),r);temp.updateMatrix();batches.get(key).push(temp.matrix.clone());temp.rotation.set(0,0,0);}
+ function roof(x,z,w,d,y,h,pyramid=false){
+   const rotated=d>w;if(rotated){const swap=w;w=d;d=swap;}
+   const ridge=pyramid?0:Math.max(0,w/2-d*.4),n=10;
+   const corners=[[-w/2,-d/2],[w/2,-d/2],[w/2,d/2],[-w/2,d/2]];
+   const tops=[[-ridge,0],[ridge,0],[ridge,0],[-ridge,0]];
+   function p(face,u,t){const a=corners[face],b=corners[(face+1)%4],c=tops[face],dd=tops[(face+1)%4];let bx=a[0]+(b[0]-a[0])*u,bz=a[1]+(b[1]-a[1])*u,tx=c[0]+(dd[0]-c[0])*u,tz=c[1]+(dd[1]-c[1])*u;let yy=h*Math.pow(t,1.65)+h*.12*Math.pow(1-t,8)*Math.pow(Math.abs(u-.5)*2,5),xx=bx+(tx-bx)*t,zz=bz+(tz-bz)*t;return [x+(rotated?zz:xx),y+yy,z+(rotated?xx:zz)];}
+   for(let f=0;f<4;f++){
+    for(let j=0;j<n;j++)for(let i=0;i<8;i++)quad('roof',p(f,i/8,j/n),p(f,(i+1)/8,j/n),p(f,(i+1)/8,(j+1)/n),p(f,i/8,(j+1)/n));
+    let ribs=Math.ceil((f%2?d:w)/1.25);for(let i=0;i<=ribs;i++)for(let j=0;j<n;j++){const a=p(f,i/ribs,j/n),b=p(f,i/ribs,(j+1)/n);a[1]+=.12;b[1]+=.12;lines.push(...a,...b);}
+    for(let j=0;j<n;j++){rod(p(f,0,j/n),p(f,0,(j+1)/n),.28);rod(p(f,j/n,0),p(f,(j+1)/n,0),.25);}
+   }
+   if(ridge>0){rod([x-(rotated?0:ridge),y+h+.2,z-(rotated?ridge:0)],[x+(rotated?0:ridge),y+h+.2,z+(rotated?ridge:0)],.32);for(let s of [-1,1]){let xx=x+(rotated?0:s*ridge),zz=z+(rotated?s*ridge:0);box('ridge',xx,y+h+1.1,zz,1.2,2,1);instance('sphere','ridge',xx,y+h+2.1,zz,.6,.8,.5);}}
+   else instance('sphere','ridge',x,y+h+1,z,.65,1.2,.65);
+ }
+ function railing(x,z,w,d,y){for(const s of [-1,1]){
+    box('white',x,y+1.5,z+s*d/2,w,.35,.35);box('white',x,y+.65,z+s*d/2,w,.26,.28);
+    for(let a=-w/2;a<=w/2+.1;a+=3.4)box('white',x+a,y+.9,z+s*d/2,.5,1.8,.5);
+    box('white',x+s*w/2,y+1.5,z,.35,.35,d);box('white',x+s*w/2,y+.65,z,.28,.26,d);
+    for(let a=-d/2;a<=d/2+.1;a+=3.4)box('white',x+s*w/2,y+.9,z+a,.5,1.8,.5);
+   }}
+ function stairs(x,z,w,h,len,dir=1){const n=Math.max(4,Math.round(h/.45));for(let i=0;i<n;i++)box('stone',x,(h*(n-i)/n)/2,z+dir*(i+.5)*len/n,w,h*(n-i)/n,len/n+.05);}
+ const picks=[], buildings=[];
+ function hall(name,x,z,w,d,h=9,opt={}){
+  buildings.push({id:'part-'+buildings.length,name,x,z,w,d,h,opt});const base=opt.base||1.5;box('stone',x,base/2,z,w+5,base,d+5);box('wall',x,base+h/2,z,w*.87,h,d*.82);
+  box('teal',x,base+h-.65,z,w+1,1.05,d+1);box('ridge',x,base+h-.14,z,w+1,.16,d+1);
+  const bays=opt.bays||Math.max(3,Math.round(w/5)|1);for(let i=0;i<=bays;i++){
+   let xx=x-w/2+i*w/bays;
+   for(let s of [-1,1]){instance('cyl','red',xx,base+h*.47,z+s*d*.49,.38,h*.94,.38);box('teal',xx,base+h-.4,z+s*d*.52,1.3,.55,1.4);box('white',xx,base+.25,z+s*d*.49,.85,.5,.85);}
+  }
+  for(let i=0;i<bays;i++){let xx=x-w/2+(i+.5)*w/bays;for(let s of [-1,1]){box('dark',xx,base+h*.47,z+s*d*.412,w/bays*.7,h*.71,.3);box('red',xx,base+h*.47,z+s*(d*.412+.18),.18,h*.71,.16);for(let q=1;q<4;q++)box('red',xx,base+h*(.19+q*.15),z+s*(d*.412+.18),w/bays*.7,.13,.16);}}
+  for(let s of [-1,1])for(let q=-1;q<=1;q++)instance('cyl','red',x+s*w*.48,base+h*.47,z+q*d*.32,.35,h*.94,.35);
+  let ry=base+h;
+  if(opt.double){roof(x,z,w+9,d+9,ry,3.5,opt.pyramid);box('red',x,ry+3.5,z,w*.87,3.5,d*.77);box('teal',x,ry+4.7,z,w*.9,.85,d*.8);ry+=5;roof(x,z,w+5,d+5,ry,opt.rh||7,opt.pyramid);}
+  else roof(x,z,w+6,d+6,ry,opt.rh||Math.max(3,d*.28),opt.pyramid);
+  if(opt.steps!==false)stairs(x,z+d/2+2.5,w*.36,base,base*2.3);
+  if(name)picks.push({name,pos:new T.Vector3(x,ry+(opt.rh||7)+5,z)});
+ }
+ function wall(x,z,w,d,h=4){box('wall',x,h/2,z,w,h,d);box('roof',x,h+.3,z,w+.6,.65,d+.6);}
+ // Approximate ground plan, world coordinates in metres; north is negative Z.
+ box('base',0,-9,0,890,12,1100);box('water',0,-.9,0,850,2,1060);box('stone',0,-.2,0,774,3,981);box('paving',0,0,0,748,3,958);
+ for(const x of [-375,375]){wall(x,0,9,960,10);box('stone',x,10.4,0,10,.8,960);for(let z=-478;z<480;z+=5)box('wall',x,11.2,z,9,1.2,2.6);}
+ for(const z of [-480,480])for(const x of [-210,210]){wall(x,z,330,10,10);box('stone',x,10.4,z,330,.8,10);for(let a=-165;a<165;a+=5)box('wall',x+a,11.2,z,2.6,1.2,9);}
+ // Meridian Gate: main block, projecting arms and five roof pavilions.
+ for(let s of [-1,1])box('wall',s*40,7,465,45,14,28);
+ box('wall',0,12,465,36,4,28);for(let s of [-1,1])box('wall',s*13,6,465,9,12,28);
+ hall('午门',0,465,66,22,8,{base:14,double:true,bays:9,rh:6,steps:false});
+ for(let s of [-1,1]){box('wall',s*72,7,495,18,14,88);hall('',s*72,490,12,80,3,{base:14,rh:3,steps:false});hall('',s*72,451,18,18,5,{base:18,double:true,pyramid:true,rh:5,steps:false});hall('',s*72,532,18,18,5,{base:14,double:true,pyramid:true,rh:5,steps:false});box('stone',s*72,-.3,524,25,2,100);}
+ // North and side gates.
+ box('wall',0,6,-480,76,12,26);hall('神武门',0,-480,48,20,8,{base:12,double:true,rh:6,steps:false});
+ for(let s of [-1,1]){box('stone',s*405,-.2,170,73,2,25);box('wall',s*375,5,170,25,10,50);hall('',s*375,170,24,36,7,{base:10,double:true,steps:false,rh:5});}
+ for(let x of [-372,372])for(let z of [-477,477]){box('wall',x,6,z,28,12,28);hall('',x,z,24,24,5,{base:12,double:true,pyramid:true,steps:false,rh:6});roof(x,z,36,17,20,5);roof(x,z,17,36,20,5);}
+ // Five bridges span the curved Golden Water River.
+ for(let i=0;i<60;i++){let x=-147+i*5,z=369-25*Math.cos(x/147*Math.PI/2);box('water',x,1.65,z,5.2,.35,13);for(let s of [-1,1])box('stone',x,2,z+s*7,5.2,1.3,1);}
+ for(let x of [-61,-30,0,30,61]){let z=369-25*Math.cos(x/147*Math.PI/2);box('white',x,3,z,x===0?12:9,2,24);railing(x,z,x===0?12:9,24,4);stairs(x,z+12,x===0?12:9,4,9);stairs(x,z-12,x===0?12:9,4,9,-1);}
+ // Courtyard enclosure and long covered side galleries.
+ for(let x of [-147,147])hall('',x,295,10,257,4,{steps:false,rh:3});
+ hall('太和门',0,286,57,24,10,{base:3,double:true,bays:9,rh:7});
+ for(let x of [-92,92]){wall(x,286,87,3,5);hall('',x,286,25,11,4,{steps:false,rh:3});}
+ for(let x of [-130,130]){hall('',x,158,14,205,5,{steps:false,rh:4});hall('',x,142,24,45,9,{base:2,double:true,rh:5});}
+ // Shared raised I-shaped terrace for the three great halls.
+ for(let i=0;i<3;i++){box('stone',0,2+i*2,53,118-i*7,2,70-i*5);box('stone',0,2+i*2,-30,57-i*5,2,106);box('stone',0,2+i*2,-92,99-i*6,2,58-i*5);railing(0,53,118-i*7,70-i*5,3+i*2);railing(0,-92,99-i*6,58-i*5,3+i*2);}
+ stairs(0,90,26,7,24);stairs(-41,90,13,7,24);stairs(41,90,13,7,24);stairs(0,-122,24,7,20,-1);
+ hall('太和殿',0,53,64,34,12,{base:8,double:true,bays:11,rh:8,steps:false});
+ hall('中和殿',0,-24,24,24,8,{base:8,pyramid:true,rh:9,bays:3,steps:false});
+ hall('保和殿',0,-92,50,27,10,{base:8,double:true,bays:9,rh:7,steps:false});
+ for(let x of [-99,99])hall('',x,-37,10,173,4,{rh:3,steps:false});
+ hall('乾清门',0,-167,32,13,6,{base:2,rh:4});for(let x of [-65,65])wall(x,-167,92,3,4);
+ hall('乾清宫',0,-224,43,22,10,{base:3,double:true,bays:9,rh:6});
+ hall('交泰殿',0,-278,18,18,7,{base:2,pyramid:true,rh:7});
+ hall('坤宁宫',0,-322,41,20,8,{base:2,double:true,bays:9,rh:5});
+ for(let x of [-57,57])hall('',x,-252,8,182,3,{rh:3,steps:false});
+ wall(0,-350,117,3,4);hall('',0,-350,15,8,4,{rh:3});
+ // Six eastern / western palaces: two columns of three courtyard compounds.
+ function compound(x,z,w=59,d=57,variant=0){
+   wall(x,z+d/2,w,2.3,3.7);wall(x,z-d/2,w,2.3,3.7);for(let s of [-1,1])wall(x+s*w/2,z,2.3,d,3.7);
+   hall('',x,z-d*.27,w*.65,12,5+variant,{rh:4,bays:5});hall('',x,z+d*.32,15,8,3,{rh:3});
+   for(let s of [-1,1])hall('',x+s*w*.36,z,9,d*.55,3.8,{rh:3,steps:false});
+ }
+ for(let s of [-1,1])for(let c=0;c<2;c++)for(let r=0;r<3;r++)compound(s*(99+c*67),-196-r*68,57,59,r===2?1:0);
+ // Western residences and eastern ceremonial compounds.
+ for(let s of [-1,1]){
+  for(let r=0;r<3;r++)compound(s*178,20-r*65,62,56,r%2);
+  for(let r=0;r<4;r++)compound(s*319,-166-r*65,54,57,0);
+  for(let r=0;r<3;r++)compound(s*313,270-r*65,54,56,0);
+ }
+ function precinct(x,z,name){wall(x,z,105,2,4);for(let s of [-1,1])hall('',x+s*49,z-54,9,122,4,{rh:3,steps:false});hall('',x,z+2,28,14,6,{rh:5});hall(name,x,z-67,39,23,8,{double:true,rh:6});hall('',x,z-116,33,18,6,{rh:5});}
+ precinct(-240,284,'武英殿');precinct(237,284,'文华殿');precinct(-249,-71,'慈宁宫');precinct(249,-190,'宁寿宫');
+ for(let s of [-1,1])for(let z of [377,410]){hall('',s*235,z,142,13,4,{rh:4,steps:false});}
+ for(let x of [-270,-205,-140,140,205,270])compound(x,-418,56,60,0);
+ // Imperial garden: trees, pavilions, rocks, geometric paths.
+ box('earth',0,1.55,-404,119,.25,94);box('stone',0,1.85,-404,10,.45,94);box('stone',0,1.85,-406,119,.45,6);
+ hall('御花园 · 钦安殿',0,-421,21,15,7,{base:2,rh:6});
+ for(let s of [-1,1]){hall('',s*40,-380,12,12,4,{pyramid:true,rh:5});hall('',s*43,-441,11,11,4,{pyramid:true,rh:5});}
+ let seed=240914;function rand(){seed=(seed*1664525+1013904223)>>>0;return seed/4294967296;}
+ function tree(x,z,h=10){instance('cyl','trunk',x,1+h*.3,z,.6,h*.6,.6);for(let j=0;j<3;j++)instance('sphere',j%2?'leaf':'leaf2',x+(rand()-.5)*2,h*.58+j*h*.15,z+(rand()-.5)*2,h*.24,h*.3,h*.24);}
+ for(let i=0;i<58;i++){let x=(rand()-.5)*106,z=-363-rand()*90;if(Math.abs(x)>12&&!(Math.abs(x)>27&&Math.abs(x)<52&&(z>-393||z<-427)))tree(x,z,7+rand()*7);}
+ for(let s of [-1,1]){for(let z=-445;z<439;z+=23)tree(s*355,z,7+rand()*6);for(let x=-343;x<350;x+=23)tree(x,s*460,7+rand()*5);}
+ for(let i=0;i<42;i++){let x=(rand()>.5?1:-1)*(333+rand()*12),z=rand()*520-90;tree(x,z,6+rand()*6);}
+ for(let s of [-1,1]){compound(s*249,93,99,61,1);compound(s*250,14,99,67,0);}
+ compound(249,-74,99,72,1);for(let s of [-1,1])for(let z of [338,367])compound(s*250,z,90,25,0);
+ // Paving seams and central stone processional walk.
+ box('white',0,1.62,191,7,.15,145);box('white',0,1.65,411,6,.15,73);
+ const seam=[];for(let z=115;z<268;z+=8)seam.push(-116,1.6,z,116,1.6,z);for(let x=-112;x<=112;x+=8)seam.push(x,1.6,115,x,1.6,268);
+ let sg=new T.BufferGeometry();sg.setAttribute('position',new T.Float32BufferAttribute(seam,3));model.add(new T.LineSegments(sg,new T.LineBasicMaterial({color:0x767b72,transparent:true,opacity:.23})));
+ // Batch geometry to keep orbiting smooth.
+ for(let [key,arr] of batches){let [shape,m]=key.split('|'),mesh=new T.InstancedMesh(geom[shape],materials[m],arr.length);arr.forEach((mx,i)=>mesh.setMatrixAt(i,mx));mesh.castShadow=!['paving','water','base','earth'].includes(m);mesh.receiveShadow=true;mesh.computeBoundingSphere();model.add(mesh);}
+ for(let [m,arr] of Object.entries(surfaces)){let g=new T.BufferGeometry();g.setAttribute('position',new T.Float32BufferAttribute(arr,3));const uv=[];for(let i=0;i<arr.length;i+=3)uv.push(arr[i]/6,arr[i+2]/6);g.setAttribute('uv',new T.Float32BufferAttribute(uv,2));g.computeVertexNormals();const material=materials[m].clone();material.side=T.DoubleSide;let mesh=new T.Mesh(g,material);mesh.castShadow=true;mesh.receiveShadow=true;model.add(mesh);}
+ let lg=new T.BufferGeometry();lg.setAttribute('position',new T.Float32BufferAttribute(lines,3));model.add(new T.LineSegments(lg,new T.LineBasicMaterial({color:0x8e6528,transparent:true,opacity:.45})));
+ const axisPositions=[];for(let z=-492;z<550;z+=15)axisPositions.push(0,42,z,0,42,z+8);const ag=new T.BufferGeometry();ag.setAttribute('position',new T.Float32BufferAttribute(axisPositions,3));const axis=new T.LineSegments(ag,new T.LineBasicMaterial({color:0x4aa8ad,transparent:true,opacity:.65,depthTest:false}));scene.add(axis);
+ // Projected labels; declutter dynamically as the viewpoint changes.
+ const tagLayer=root.querySelector('.palace-tags');picks.forEach((p,i)=>{const el=document.createElement('button');el.type='button';el.className='palace-tag';el.textContent=p.name;el.addEventListener('click',()=>{const b=buildings.find(b=>b.name===p.name);if(b)parent.postMessage({type:'palace-select',building:b},location.origin);});tagLayer.appendChild(el);p.el=el;p.priority=['太和殿','午门','神武门','乾清宫','保和殿','中和殿'].includes(p.name)?0:1;});picks.sort((a,b)=>a.priority-b.priority);
+ let theta=.24,phi=.82,radius=1680,target=new T.Vector3(0,0,20),dirty=true,labelOn=true,previousAspect=null;
+ function draw(){if(!dirty)return;dirty=false;camera.position.set(target.x+radius*Math.sin(phi)*Math.sin(theta),target.y+radius*Math.cos(phi),target.z+radius*Math.sin(phi)*Math.cos(theta));camera.lookAt(target);renderer.render(scene,camera);
+  const w=stage.clientWidth,h=stage.clientHeight,occupied=[];for(const p of picks){const v=p.pos.clone().project(camera),xx=(v.x+1)*w/2,yy=(1-v.y)*h/2,tw=p.name.length*12+16;const rect={x:xx-tw/2,y:yy-23,w:tw,h:26};let show=labelOn&&v.z<1&&xx>tw/2&&xx<w-tw/2&&yy>26&&yy<h-8&&!occupied.some(r=>rect.x<r.x+r.w+6&&rect.x+rect.w+6>r.x&&rect.y<r.y+r.h+5&&rect.y+rect.h+5>r.y);p.el.style.display=show?'block':'none';if(show){occupied.push(rect);p.el.style.left=xx+'px';p.el.style.top=yy+'px';}}
+  const names=['南','东南','东','东北','北','西北','西','西南'];let n=((Math.round(theta/(Math.PI/4))%8)+8)%8;root.querySelector('.palace-bearing').textContent=phi<.15?'俯视 · 北在上':names[n]+'侧视角';
+ }
+ function invalidate(){dirty=true;requestAnimationFrame(draw);}
+ function resize(){const w=stage.clientWidth,h=stage.clientHeight;if(!w||!h)return;renderer.setSize(w,h,false);camera.aspect=w/h;const factor=Math.max(1,1.15/camera.aspect);if(previousAspect===null)radius*=factor;else radius*=factor/previousAspect;previousAspect=factor;camera.updateProjectionMatrix();invalidate();}
+ const ro=new ResizeObserver(resize);ro.observe(stage);
+ function pan(dx,dy){const scale=radius*.001;target.x+=(-Math.cos(theta)*dx+Math.sin(theta)*dy)*scale;target.z+=(Math.sin(theta)*dx+Math.cos(theta)*dy)*scale;target.x=T.MathUtils.clamp(target.x,-550,550);target.z=T.MathUtils.clamp(target.z,-650,650);}
+ for(const name of ['pointerdown','wheel','keydown'])canvas.addEventListener(name,()=>parent.postMessage({type:'palace-interact'},location.origin));const pointers=new Map();let pinch=null;let startPoint=null;
+ canvas.addEventListener('pointerdown',e=>{startPoint={x:e.clientX,y:e.clientY,button:e.button};canvas.setPointerCapture(e.pointerId);pointers.set(e.pointerId,{x:e.clientX,y:e.clientY});pinch=null;});
+ canvas.addEventListener('pointermove',e=>{const prev=pointers.get(e.pointerId);if(!prev)return;const dx=e.clientX-prev.x,dy=e.clientY-prev.y;pointers.set(e.pointerId,{x:e.clientX,y:e.clientY});if(pointers.size===2){const a=[...pointers.values()],dist=Math.hypot(a[0].x-a[1].x,a[0].y-a[1].y);if(pinch)radius=T.MathUtils.clamp(radius*pinch/dist,95,2400);pinch=dist;}else if(e.buttons===2||e.shiftKey){pan(dx,dy);}else{theta-=dx*.006;phi=T.MathUtils.clamp(phi+dy*.005,.035,1.49);}invalidate();});
+ function end(e){if(e.type==='pointerup'&&startPoint&&startPoint.button===0&&Math.hypot(e.clientX-startPoint.x,e.clientY-startPoint.y)<5){const rect=canvas.getBoundingClientRect(),ray=new T.Raycaster();ray.setFromCamera(new T.Vector2((e.clientX-rect.left)/rect.width*2-1,-(e.clientY-rect.top)/rect.height*2+1),camera);const hit=ray.intersectObjects(hitBoxes)[0];if(hit)parent.postMessage({type:'palace-select',building:hit.object.userData.building},location.origin);}pointers.delete(e.pointerId);pinch=null;startPoint=null;}
+ canvas.addEventListener('pointerup',end);canvas.addEventListener('pointercancel',end);canvas.addEventListener('lostpointercapture',end);canvas.addEventListener('contextmenu',e=>e.preventDefault());
+ canvas.addEventListener('wheel',e=>{e.preventDefault();radius=T.MathUtils.clamp(radius*Math.exp(e.deltaY*.001),95,2400);invalidate();},{passive:false});
+ root.querySelector('#palace-axis').addEventListener('change',e=>{axis.visible=e.target.checked;invalidate();});root.querySelector('#palace-labels').addEventListener('change',e=>{labelOn=e.target.checked;invalidate();});
+ canvas.addEventListener('webglcontextlost',e=>{e.preventDefault();loading.textContent='三维显示已暂停，请重新打开此视图。';loading.style.display='grid';});
+ root.addEventListener('keydown',e=>{if(e.target.tagName==='INPUT')return;let used=true;if(e.key==='ArrowLeft')theta+=.12;else if(e.key==='ArrowRight')theta-=.12;else if(e.key==='ArrowUp')phi=Math.max(.035,phi-.08);else if(e.key==='ArrowDown')phi=Math.min(1.49,phi+.08);else if(e.key==='+')radius=Math.max(95,radius*.9);else if(e.key==='-')radius=Math.min(2400,radius*1.1);else used=false;if(used){e.preventDefault();invalidate();}});
+ const hitBoxes=buildings.map(b=>{const m=new T.Mesh(new T.BoxGeometry(b.w+4,b.h+14,b.d+4),new T.MeshBasicMaterial({visible:false}));m.position.set(b.x,(b.opt.base||1.5)+b.h/2+5,b.z);m.userData.building=b;scene.add(m);m.updateMatrixWorld();return m;});window.addEventListener('message',e=>{if(e.origin!==location.origin||e.source!==parent)return;if(e.data.type==='palace-request-ready'){parent.postMessage({type:'palace-ready',count:buildings.length},location.origin);}if(e.data.type==='palace-camera'){const a=e.data.action;if(a==='rotate'&&Number.isFinite(e.data.amount))theta+=e.data.amount;else if(a==='left')theta+=Math.PI/12;else if(a==='right')theta-=Math.PI/12;else if(a==='in')radius=T.MathUtils.clamp(radius*.8,95,6000);else if(a==='out')radius=T.MathUtils.clamp(radius/ .8,95,6000);else if(a==='up')phi=Math.max(.035,phi-.15);else if(a==='down')phi=Math.min(1.49,phi+.15);invalidate();}if(e.data.type==='palace-reset'){theta=.24;phi=.82;radius=1680*Math.max(1,1.15/camera.aspect);target.set(0,0,20);invalidate();}});parent.postMessage({type:'palace-ready',count:buildings.length},location.origin);resize();loading.style.display='none';root.dataset.ready='true';
+ window.__palaceDebug={renderer,scene,camera,getView:()=>({theta,phi,radius,target:target.toArray()}),setView:(t,p,r)=>{theta=t;phi=p;radius=r;invalidate();},buildings:picks.length};
+ }catch(err){loading.textContent='三维场景未能启动：'+err.message;loading.setAttribute('role','alert');console.error(err);}
+})();
+</script>
+</body></html>
